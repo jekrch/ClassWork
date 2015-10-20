@@ -1,0 +1,21 @@
+You've been tasked with adding to an existing car dealership's website Software Guild's Slighly Used Car Emporium
+
+Although a bunch of the views and code have already been written, your boss has asked you to complete the following:
+
+1. Add to the car details view. Right now it's empty. Examine the model to see what kind of data you could display to the user and make the design up yourself.
+2. Add the ability to add a car to the list of available cars.
+3. Add validation to the contact form. The rules are:
+	- Name is required
+	- Phone number must be in format XXX-XXX-XXXX
+	- Email is required and must containt an @ symbol (if you like, you can research and use regex instead)
+	- Income is required...it must be greater than 20,000 and be in the format XXX,XXX
+4. Add some advanced routing to the project. We should be able to navigate to a specific car by going to a url like ~/Car/YYYY/Make/Model
+	- For example, for a 1996 Honda Accord: ~/Car/1996/Honda/Accord should take you to the details page for that car
+	- Another example: ~/Car/1999/Toyota/Camry should take you to the Toyota Camry
+
+If you finish with those tasks, she'd also like you to add these (for a nice bonus!):
+
+1. Require HTTPS when the user submits the contact form
+2. Create a new form (linked from the car details page) that a user can fill out to express interest in a specific car
+3. Email the form to an email address (maybe a salesperson for the company...make it up). You can register for a free SendGrid account. 
+4. Create a very simple login system that allows users who login to edit car details or add cars.

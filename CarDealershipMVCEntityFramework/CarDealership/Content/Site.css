@@ -1,0 +1,95 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+     
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.field-validation-error {
+    color: red;
+}
+
+.input-validation-error {
+    background-color: red;
+}
+
+.car-image {
+
+    max-height: 300px;
+    max-width: 300px;
+
+    position: relative;
+    top: 50%;
+
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+}
+
+.car-container {
+    padding: 5px;
+    height: 340px;
+    text-align: center;
+}
+
+.center {
+    text-align: center; 
+}
+
+.car-details {
+    margin-top: 10px;
+    
+}
+
+.details-image {
+    width: 100%;
+}
+.details-image-box {
+    padding: 40px;
+    padding-top: 10px; 
+}
+
+.panel-footer {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 30px;
+}
+.add-item {
+    margin: 20px;
+    margin-left: 0px; 
+}
+.add-field {
+    margin-bottom: 20px;  
+}
+
+.well {
+    
+    margin-top: 40px; 
+    margin-bottom: 10px;
+}
+
+
+
+

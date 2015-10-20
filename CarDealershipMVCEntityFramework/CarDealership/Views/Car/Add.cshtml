@@ -1,0 +1,84 @@
+﻿@model CarDealership.Models.OCar
+
+@{
+    ViewBag.Title = "Add";
+}
+
+    <script>
+        $(function () {
+            $('#datething').datepicker();
+            $('#accord').accordion();
+        });
+    </script>
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+
+        <h2>Add</h2>
+
+      
+
+        @using (Html.BeginForm("Add", "Car", FormMethod.Post))
+        {
+
+            <div id="accord">
+                <h3>Car Details</h3>
+                <div class="row">
+
+                    <div class="row add-field">
+                        <span class="col-xs-12 col-sm-2">@Html.LabelFor(m => m.Make, new {@class = "label label-default"}) </span>
+                        <span class="col-xs-12 col-sm-10">
+                            @Html.TextBoxFor(m=>m.Make)
+                            @Html.ValidationMessageFor(m => m.Make)
+                        </span>
+
+                    </div>
+
+                    <div class="row add-field">
+                        <span class="col-xs-12 col-sm-2">@Html.LabelFor(m => m.Model, new { @class = "label label-default" }) </span>
+                        <span class="col-xs-12 col-sm-10">@Html.TextBoxFor(m => m.Model)
+                        @Html.ValidationMessageFor(m => m.Model)</span>
+                    </div>
+
+                    <div class="row add-field">
+                        <span class="col-xs-12 col-sm-2">@Html.LabelFor(m => m.Year, new { @class = "label label-default" })  </span>
+                        <span class="col-xs-12 col-sm-10">@Html.TextBoxFor(m => m.Year)
+                        @Html.ValidationMessageFor(m => m.Year)</span>
+                    </div>
+                    <div class="row ">
+                        <span class="col-xs-12 col-sm-2">@Html.LabelFor(m => m.Price, new { @class = "label label-default" })  </span>
+                        <span class="col-xs-12 col-sm-10">@Html.TextBoxFor(m => m.Price)
+                        @Html.ValidationMessageFor(m => m.Price)</span>
+                    </div>
+
+                </div>
+                <h3>Display</h3>
+                <div>
+                    <p>
+                        <div class="row add-field">
+                            <span class="col-xs-12 col-sm-2">@Html.LabelFor(m => m.Title, new { @class = "label label-default" })</span>
+                            <span class="col-xs-12 col-sm-10">@Html.TextBoxFor(m => m.Title)
+                            @Html.ValidationMessageFor(m => m.Title)</span>
+                        </div>
+                        <div class="row add-field">
+                            <span class="col-xs-12 col-sm-2">@Html.LabelFor(m => m.ImageUrl, new { @class = "label label-default" })</span>
+                            <span class="col-xs-12 col-sm-10">@Html.TextBoxFor(m => m.ImageUrl)
+                            @Html.ValidationMessageFor(m => m.ImageUrl)</span>
+                        </div>
+                    </p>
+                </div>
+                <h3>Description</h3>
+                <div>
+                    <p>
+                    <p>@Html.ValidationMessageFor(m => m.Description)</p>
+                        <p class="col-xs-12">@Html.TextAreaFor(m => m.Description, new {style = "height:150px;", @class = "form-control"})</p>
+                    </p>
+                </div>
+            </div>
+            <p class="add-item">
+                <button class="btn btn-primary" style="line-height: 100%">Submit</button>
+            </p>
+        }
+    </div>
+</div>

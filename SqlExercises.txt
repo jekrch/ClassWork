@@ -1,0 +1,208 @@
+AdventureWorks SQL Exercises
+
+1 ---------
+Show the first name and the email address of customer with CompanyName 'Bike World'
+-----------
+
+SELECT FirstName, EmailAddress FROM CustomerAW
+WHERE CompanyName = 'Bike World'
+
+
+2 ---------
+Show the CompanyName for all customers with an address in City 'Dallas'.
+-----------
+
+SELECT CompanyName FROM CustomerAW c 
+JOIN CustomerAddress ca ON c.CustomerID = ca.CustomerID
+JOIN Address a ON a.AddressID = ca.AddressID
+WHERE City = 'Dallas'  
+
+
+3 ---------
+How many items with ListPrice more than $1000 have been sold?
+-----------
+
+SELECT Sum(OrderQty) FROM SalesOrderDetail s
+JOIN ProductAW p ON s.ProductID = p.ProductID
+WHERE ListPrice > 1000 
+
+
+4 ---------
+Give the CompanyName of those customers with orders over $100000. Include the subtotal plus tax plus freight.
+-----------
+
+SELECT CompanyName FROM CustomerAW caw
+JOIN SalesOrderHeader soh on soh.CustomerID = caw.CustomerID
+WHERE ( soh.SubTotal + soh.TaxAmt + soh.Freight ) > 100000
+
+
+5 ---------
+Find the number of left racing socks ('Racing Socks, L') ordered by CompanyName 'Riding Cycles'
+-----------
+
+SELECT sod.OrderQty AS Qty, caw.CompanyName 
+FROM SalesOrderDetail sod
+JOIN SalesOrderHeader soh ON soh.SalesOrderID = sod.SalesOrderID
+JOIN CustomerAW caw ON caw.CustomerID = soh.CustomerID
+JOIN ProductAW paw ON sod.ProductID = paw.ProductID
+WHERE paw.Name = 'Racing Socks, L' AND CompanyName = 'Riding Cycles'
+
+
+6 ---------
+A "Single Item Order" is a customer order where only one item is ordered. Show the SalesOrderID and the UnitPrice for every Single Item Order.
+-----------
+
+SELECT SalesOrderID, UnitPrice FROM SalesOrderDetail 
+
+GROUP BY SalesOrderID
+HAVING Sum(OrderQty) = 1
+
+
+7 ---------
+Where did the racing socks go? List the product name and the CompanyName for all Customers who ordered ProductModel 'Racing Socks'.
+-----------
+
+SELECT pm.Name, paw.Name, caw.CompanyName From ProductAW paw
+
+JOIN ProductModel pm ON pm.ProductModelID = paw.ProductModelID
+JOIN SalesOrderDetail sod ON sod.ProductID = paw.ProductID
+JOIN SalesOrderHeader soh ON sod.SalesOrderID = sod.SalesOrderID
+JOIN CustomerAW caw ON caw.CustomerID = soh.CustomerID
+
+WHERE pm.Name = 'Racing Socks'
+
+
+8 ---------
+Show the product description for culture 'fr' for product with ProductID 736.
+-----------
+
+SELECT pd.Description FROM ProductDescription pd
+
+JOIN ProductModelProductDescription pmpd 
+ON pmpd.ProductDescriptionID = pd.ProductDescriptionID
+JOIN ProductAW paw ON paw.ProductModelID = pmpd.ProductModelID 
+
+WHERE Culture = 'fr' AND paw.ProductID = 736
+
+
+9 ---------
+Use the SubTotal value in SaleOrderHeader to list orders from the largest to the smallest. For each order show the CompanyName and the SubTotal and the total weight of the order.
+-----------
+
+SELECT soh.SalesOrderID, caw.CompanyName, soh.SubTotal, 
+SUM(sod.OrderQty * paw.Weight) AS 'Order Weight'
+FROM SalesOrderHeader soh
+
+JOIN SalesOrderDetail sod ON soh.SalesOrderID = sod.SalesOrderID
+JOIN ProductAW paw ON paw.ProductID = sod.ProductID
+JOIN CustomerAW caw ON caw.CustomerID = soh.CustomerID
+
+GROUP BY soh.SalesOrderID
+ORDER BY SubTotal DESC
+
+
+10 ---------
+How many products in ProductCategory 'Cranksets' have been sold to an address in 'London'?
+------------
+
+SELECT Sum(sod.OrderQty) AS 'Qty Sold' FROM SalesOrderDetail sod
+
+JOIN ProductAW paw ON paw.ProductID = sod.ProductID 
+JOIN ProductCategory pc ON pc.ProductCategoryID = paw.ProductCategoryID
+JOIN SalesOrderHeader soh ON sod.SalesOrderID = soh.SalesOrderID
+JOIN CustomerAW caw ON caw.CustomerID = soh.CustomerID
+JOIN CustomerAddress ca ON ca.CustomerID = caw.CustomerID
+JOIN Address a ON a.AddressID = ca.AddressID 
+
+WHERE pc.Name = 'Cranksets' AND City = 'London'
+
+
+11 ---------
+For every customer with a 'Main Office' in Dallas show AddressLine1 of the 'Main Office' and AddressLine1 of the 'Shipping' address - if there is no shipping address leave it blank. Use one row per customer.
+------------
+
+SELECT ca1.CustomerID, 
+ca1.AddressLine1 AS 'Main Office',
+ca2.AddressLine1 AS 'Shipping Address' 
+
+FROM (SELECT AddressLine1, caw.CustomerID FROM CustomerAW caw 
+JOIN CustomerAddress ca ON ca.CustomerID = caw.CustomerID
+JOIN Address add1 ON ca.AddressID = add1.AddressID
+WHERE add1.City = 'Dallas' AND ca.AddressType = 'Main Office') as ca1
+
+LEFT JOIN (SELECT AddressLine1, caw.CustomerID FROM CustomerAW caw
+JOIN CustomerAddress ca ON ca.CustomerID = caw.CustomerID
+JOIN Address add1 ON ca.AddressID = add1.AddressID
+WHERE ca.AddressType = 'Shipping') ca2 ON ca2.CustomerID = ca1.CustomerID
+
+
+12 ---------
+For each order show the SalesOrderID and SubTotal calculated three ways: 
+A) From the SalesOrderHeader 
+B) Sum of OrderQty*UnitPrice 
+C) Sum of OrderQty*ListPrice
+------------
+
+SELECT soh.SalesOrderID, soh.SubTotal, Sum(sod.OrderQty*sod.UnitPrice) AS UnitPriceTotal, Sum(sod.OrderQty*paw.ListPrice) AS ListPriceTotal FROM SalesOrderHeader soh
+
+JOIN SalesOrderDetail sod ON sod.SalesOrderID = soh.SalesOrderID
+JOIN ProductAW paw ON paw.ProductID = sod.ProductID
+
+GROUP BY soh.SalesOrderID
+
+
+13 ---------- 
+(I would use TOP here but SqlZoo does not allow it)
+Show the best selling item by value.
+-------------
+
+SELECT paw.Name, sum(sod.OrderQty) AS OrderQTY
+FROM SalesOrderDetail sod 
+
+JOIN ProductAW paw ON paw.ProductID = sod.ProductID
+
+GROUP BY sod.ProductID
+ORDER BY OrderQTY desc
+
+
+14 ---------
+Show how many orders are in the following ranges (in $)
+------------
+
+SELECT '0-99' AS 'Range', 
+COUNT(SalesOrderID) AS 'Num Orders', 
+SUM(SubTotal + TaxAmt + Freight) AS 'Total Value'
+FROM SalesOrderHeader soh1
+WHERE (SubTotal + TaxAmt + Freight) < 99
+
+UNION
+
+SELECT '100-999' AS 'Range', 
+COUNT(SalesOrderID), 
+SUM(SubTotal + TaxAmt + Freight)
+FROM SalesOrderHeader soh2
+WHERE (SubTotal + TaxAmt + Freight) > 100 AND(SubTotal + TaxAmt + Freight) < 999
+
+UNION
+
+SELECT '1000-9999' AS 'Range', 
+COUNT(SalesOrderID), 
+SUM(SubTotal + TaxAmt + Freight)   
+FROM SalesOrderHeader soh3
+WHERE (SubTotal + TaxAmt + Freight) > 1000 AND(SubTotal + TaxAmt + Freight) < 9999
+
+UNION
+
+SELECT '10000-' AS 'Range', 
+COUNT(SalesOrderID), 
+SUM(SubTotal + TaxAmt + Freight) 
+FROM SalesOrderHeader soh4
+WHERE (SubTotal + TaxAmt + Freight) > 10000 
+
+
+
+
+
+
+
+

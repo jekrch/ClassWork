@@ -1,0 +1,42 @@
+﻿@model IEnumerable<CarDealership.Models.OCar>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Check out these fine, high-quality cars for sale! CLICK FOR DETAILS!</h2>
+@if (ViewBag.User != null){
+    <h3>@ViewBag.User.UserMessage</h3>
+}
+<div class="container">
+
+    @for (int i = 0; i < Model.Count(); i = i+3 )
+        {
+           var ca = Model.ElementAt(i);
+            <div class="row">
+                <div class="col-md-4 car-container ">
+                    <a href="@Url.Action("Details", new { id = ca.Id })">
+                        <img src="@ca.ImageUrl" alt="This is a car for sale" class="car-image img-rounded" />
+                    </a>
+                </div>
+                @if ((i + 1) < Model.Count()) {
+                    ca = Model.ElementAt(i+1);
+                    <div class="col-md-4 car-container">
+                        <a href="@Url.Action("Details", new { id = ca.Id })">
+                            <img src="@ca.ImageUrl" alt="This is a car for sale" class="car-image img-rounded" />
+                        </a>
+                    </div>
+                }
+                @if ((i + 2) < Model.Count()) { 
+                    ca = Model.ElementAt(i+2);
+                    <div class="col-md-4 car-container">
+                        <a href="@Url.Action("Details", new { id = ca.Id })">
+                            <img src="@ca.ImageUrl" alt="This is a car for sale" class="car-image img-rounded" />
+                        </a>
+                    </div>
+                }
+            </div>
+            <div>&nbsp;
+            </div>
+        }
+</div>
